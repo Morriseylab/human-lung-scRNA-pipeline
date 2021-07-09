@@ -8,7 +8,7 @@ library(patchwork)
 library(scExtras)
 
 
-org<-'human'
+org<-args[2]
 input10x = 'AHJP457_D_CD45neg/scRNA/STARSolo/AHJP457_D_CD45negSolo.out/Gene/filtered/'
 
 
