@@ -7,13 +7,13 @@ library(tidyverse)
 library(patchwork)
 library(scExtras)
 
-
+name<-arg[1]
 org<-args[2]
-input10x = 'AHJP457_D_CD45neg/scRNA/STARSolo/AHJP457_D_CD45negSolo.out/Gene/filtered/'
+input10x = args[3]
+outdir=args[4]
+ref<-args[5]
 
-
-outdir='AHJP457_D_CD45neg/Seurat_refmap'
-
+# Make Dirs ---------------------------------------------------------------
 dir.create(outdir,recursive = T,showWarnings = F)
 plotdir <- paste0(outdir,'/plots')
 dir.create(plotdir,showWarnings = F)
@@ -21,11 +21,8 @@ qcdir <-paste0(outdir,'/qc')
 dir.create(qcdir,showWarnings = F)
 
 
-query= RunQC(dir=outdir,org=org,name="AHJP457_D_CD45",files=input10x ,filter=T, doubletdetection = T,UpperMitoCutoff=10)
-
-
-reference <- readRDS("~/dsdata/projects/Morrisey/Maria/lungMAP/Periph_5sample_Intergrate/Seuratv4_Anno.RDS")
-
+query= RunQC(dir=outdir,org=org,name=name,files=input10x ,filter=T, doubletdetection = T,UpperMitoCutoff=10)
+reference <- readRDS(ref)
 
 query <- SCTransform(
   object = query,
@@ -41,7 +38,6 @@ anchors <- FindTransferAnchors(
   reference.reduction='pca'
 )
 
-
 query <- MapQuery(
   anchorset = anchors,
   query = query,
@@ -51,5 +47,4 @@ query <- MapQuery(
 )
 
 saveRDS(object = query,file = paste0(outdir,'seurat.RDS'))
-
 
