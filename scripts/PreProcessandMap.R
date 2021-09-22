@@ -7,7 +7,7 @@ library(tidyverse)
 library(patchwork)
 library(scExtras)
 
-name<-arg[1]
+name<-args[1]
 org<-args[2]
 input10x = args[3]
 outdir=args[4]
@@ -21,7 +21,7 @@ qcdir <-paste0(outdir,'/qc')
 dir.create(qcdir,showWarnings = F)
 
 
-query= RunQC(dir=outdir,org=org,name=name,files=input10x ,filter=T, doubletdetection = T,UpperMitoCutoff=10)
+query= RunQC(dir=outdir,org=org,name=name,files=input10x ,filter=T, doubletdetection = F,UpperMitoCutoff=10)
 reference <- readRDS(ref)
 
 query <- SCTransform(
@@ -46,5 +46,5 @@ query <- MapQuery(
   reduction.model = 'umap'
 )
 
-saveRDS(object = query,file = paste0(outdir,'seurat.RDS'))
+saveRDS(object = query,file = paste0(outdir,'/seurat.RDS'))
 

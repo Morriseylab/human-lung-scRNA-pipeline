@@ -1,14 +1,15 @@
 rule map:
     input:
         script = "scripts/PreProcessandMap.R",
-        ref = "Periph_5sample_Intergrate/Seuratv4_Anno.RDS",
-        query = "{donor}/{library}/"
+        ref = "/home/bapoorva/Morrisey/Maria/lungMAP/Periph_5sample_Intergrate/Seuratv4_Anno.RDS"
     params:
-        org = "human"
+        org = "human",
+        input10x = "test/{donor}/{library}/filtered",
+        outdir="test/{donor}/{library}/seurat/"
     output:
-        "{donor}/{library}/seurat/seurat_refanno.rds"
+        "{donor}/{library}/seurat/seurat_refAnno.RDS"
     shell:
         """
-        mkdir -p {donor}/{library}/seurat/
-        Rscript {input.script} {donor} {params.org} {params.xfer} {output} > logs/map_{wildcards.dataset}_{wildcards.donor}.Rout 2>&1
+        mkdir -p test/{wildcards.donor}/{wildcards.library}/seurat/
+        Rscript {input.script} {wildcards.donor} {params.org} {params.input10x} {params.outdir} {input.ref}
         """
